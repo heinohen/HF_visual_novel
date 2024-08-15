@@ -1,0 +1,22 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+While running game code:
+  File "game/script.rpy", line 300, in script
+    jump farm
+ScriptError: could not find label 'farm'.
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "game/script.rpy", line 300, in script
+    jump farm
+  File "/home/heinohen/jemma/renpy/renpy-8.2.3-sdk/renpy/ast.py", line 1701, in execute
+    rv = renpy.game.script.lookup(target)
+  File "/home/heinohen/jemma/renpy/renpy-8.2.3-sdk/renpy/script.py", line 1103, in lookup
+    raise ScriptError("could not find label '%s'." % str(original))
+ScriptError: could not find label 'farm'.
+
+Linux-6.8.0-40-generic-x86_64-with-glibc2.35 x86_64
+Ren'Py 8.2.3.24061702
+Hero Farmer 1.0
+Thu Aug 15 14:42:37 2024
