@@ -2,9 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/script.rpy", line 128: invalid syntax
-        n "HIT!"
-           ^
+File "game/script.rpy", line 298: expected menuitem
+    print(first, second, third)
+    ^
 
 Ren'Py Version: Ren'Py 8.2.3.24061702
-Thu Aug 15 13:26:02 2024
+Mon Aug 19 09:19:38 2024

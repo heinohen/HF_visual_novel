@@ -10,6 +10,15 @@ define v = Character("Vendor", color="5c5c5e")
 define n = Character("Narrator", color="ffffff")
 define b = Character("Boss", color="770699")
 
+transform plot:
+    xalign 0.16 yalign 0.60
+
+transform vendor_pos:
+    xalign 0.36 yalign 0.30 zoom 0.2
+
+transform vendor_perus_pos:
+    zoom 0.8
+
 
 # FARM LEVEL
 
@@ -21,7 +30,7 @@ label start:
     $ third = False
 
     # Initialize a variable.
-    $ health_points = 3
+    $ health_points = 1000
 
     scene bg farm
 
@@ -34,7 +43,7 @@ label start:
     p "i'm created in a new Ren'Py game."
     p "This is me speaking to me"
 
-    show vendori vasen at right
+    show vendori vasen at right,vendor_perus_pos
     show pelaaja oikea at left
 
     v "Hello im the vendor!"
@@ -54,10 +63,10 @@ label choices:
     v "How is it gonna be?"
 menu:
     "Continue farming, please":
-        jump choices1_a
+        jump farming
     "Embark on a great journey":
         #jump choices1_b
-        jump bosslevel
+        jump straight_line
     # This ends the game.
 
 label choices1_a:
@@ -85,9 +94,10 @@ label not_farming:
 
 
 label farming:
+    show bg farm
     show pelaaja vasen at left
     p "LETS FARM"
-    show vendori vasen at right
+    show vendori vasen at right,vendor_perus_pos
     v "Isn't there something else you would want to do?"
 
 menu:
@@ -145,8 +155,8 @@ label tutorial:
     show pelaaja perus at left
     n "If you see a green coloured spider, it is ranged ... so beware of the web attack!"
     show hamis ranged at right
-    n "You can also gain ranged attack through harvested crops"
-    n "Try to throw it with mud!"
+    n "You can also gain ranged attack through harvested crops ... if you make it that far"
+    n "Thats up to you"
     ### ATTACK BLOCK
     $ enemy_name = "RANGED SPIDER"
     $ hamis_ranged = 2
@@ -163,12 +173,12 @@ label tutorial:
     hide hamis melee
     ###
     n "This completes the tutorial... you gain your first seed"
-    n "Do you want to play the tutorial again?"
+    n "Do you want to return to the farm and move on?"
 menu:
-    "Yes":
-        jump tutorial
-    "No":
+    "Yes (goes to farm)":
         jump farmb
+    "No (plays tutorial again)":
+        jump tutorial
 
 # FARM AFTER TUTORIAL
 
@@ -187,16 +197,20 @@ menu:
 
 label farmc:
     scene bg farm
-    show pelaaja perus at left
-    show vendori vasen at right
+    show pelaaja plant at plot
+    show vendori vasen at vendor_pos
     v "Very good..."
+    v "we need more dialogue and stuff here"
+    v "description to go to first level in the forest"
     jump level1melee
 
 label farmd:
     scene bg farm
     show pelaaja perus at left
-    show vendori vasen at right
+    show vendori vasen at right,vendor_perus_pos
     v "Very good..."
+    v "we need more dialogue and stuff here"
+    v "maybe jumps more and not instantly to boss"
     jump bosslevel
 
 
@@ -229,6 +243,8 @@ label level1melee:
                     "HIT"
                     if hamis_health == 0:
                         $ enemy_dead = True
+                        if first:
+                            $ third = True
                         $ first = True
                         hide hamis melee
                         jump level1b
@@ -293,21 +309,23 @@ label level1ranged:
 
 label level1b:
     scene black
-    n "Welldone!, do you wish to continue?"
+    n "Well done!, do you wish to continue?"
+    $ print(first, second, third)
     menu:
         "Yes":
             if first and not second:
                 jump level1ranged
-            elif first and second:
+            elif first and second and not third:
                 jump level1melee
-            else:
+            elif first and second and third:
+                $ print('should jump to farm...')
                 $ first, second, third = False, False, False
                 jump farmd
         "No":
             $ first, second, third = False, False, False
-            jump farm
+            jump farming
 
-    jump farmd
+    jump farming
 
 label bosslevel:
     scene blue
@@ -328,6 +346,42 @@ label bosslevel:
         $ count -= 1
 
     "BYE!"
+
+    $ enemy_health = 3
+    $ enemy_name = "THE BOSS"
+    $ enemy_dead = False
+    while enemy_health > 0:
+        $ rand = randint(0,5)
+        $ enemy_rand = randint(0,10)
+        "Your hitpoints [health_points], [enemy_name]'s [enemy_health]"
+        menu: 
+            "Try to hit":
+                show pelaaja hyokki at right
+                if rand % 2 == 0:
+                    $ enemy_health -= 1
+                    "HIT!!!"
+                    if enemy_health == 0:
+                        $ enemy_dead = True
+                        hide boss attack
+                        $ second = True
+                        jump endscene
+                else:
+                    "MISS!!!"
+                show pelaaja perus at left
+        "[enemy_name]'s TURN"
+        if enemy_dead == False:
+            show boss attack at left
+            "BOSS ATTACK"
+            if enemy_rand % 2 == 0:
+                $ health_points -= 1
+                "HIT"
+                if health_points == 0:
+                    jump ripscene # YOU DIED
+                    return
+            else:
+                "MISS"
+        show boss attack at right
+    ###
     jump endscene
     
 

@@ -1,22 +1,32 @@
 ﻿I'm sorry, but an uncaught exception occurred.
 
 While running game code:
-  File "game/script.rpy", line 300, in script
-    jump farm
-ScriptError: could not find label 'farm'.
+  File "game/script.rpy", line 197, in script
+    show vendori vasen at halfsize, vendor_pos
+  File "game/script.rpy", line 197, in <module>
+    show vendori vasen at halfsize, vendor_pos
+NameError: name 'halfsize' is not defined
 
 -- Full Traceback ------------------------------------------------------------
 
 Full traceback:
-  File "game/script.rpy", line 300, in script
-    jump farm
-  File "/home/heinohen/jemma/renpy/renpy-8.2.3-sdk/renpy/ast.py", line 1701, in execute
-    rv = renpy.game.script.lookup(target)
-  File "/home/heinohen/jemma/renpy/renpy-8.2.3-sdk/renpy/script.py", line 1103, in lookup
-    raise ScriptError("could not find label '%s'." % str(original))
-ScriptError: could not find label 'farm'.
+  File "game/script.rpy", line 197, in script
+    show vendori vasen at halfsize, vendor_pos
+  File "/home/heinohen/jemma/renpy/renpy-8.2.3-sdk/renpy/ast.py", line 1113, in execute
+    show_imspec(self.imspec, atl=getattr(self, "atl", None))
+  File "/home/heinohen/jemma/renpy/renpy-8.2.3-sdk/renpy/ast.py", line 1072, in show_imspec
+    at_list = [ renpy.python.py_eval(i) for i in at_list ]
+  File "/home/heinohen/jemma/renpy/renpy-8.2.3-sdk/renpy/ast.py", line 1072, in <listcomp>
+    at_list = [ renpy.python.py_eval(i) for i in at_list ]
+  File "/home/heinohen/jemma/renpy/renpy-8.2.3-sdk/renpy/python.py", line 1209, in py_eval
+    return py_eval_bytecode(code, globals, locals)
+  File "/home/heinohen/jemma/renpy/renpy-8.2.3-sdk/renpy/python.py", line 1202, in py_eval_bytecode
+    return eval(bytecode, globals, locals)
+  File "game/script.rpy", line 197, in <module>
+    show vendori vasen at halfsize, vendor_pos
+NameError: name 'halfsize' is not defined
 
 Linux-6.8.0-40-generic-x86_64-with-glibc2.35 x86_64
 Ren'Py 8.2.3.24061702
 Hero Farmer 1.0
-Thu Aug 15 14:42:37 2024
+Mon Aug 19 09:41:46 2024
