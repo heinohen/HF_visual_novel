@@ -19,6 +19,24 @@ transform vendor_pos:
 transform vendor_perus_pos:
     zoom 0.8
 
+transform pelaaja_perus_pos:
+    zoom 0.8
+
+transform boss_exit1:
+    xalign 0.70 yalign 0.30 zoom 0.5
+
+transform boss_exit2:
+    xalign 0.80 yalign 0.20 zoom 0.3
+
+transform boss_exit3:
+    xalign 0.90 yalign 0.10 zoom 0.1
+
+transform endscene_pelaaja:
+    xalign 0.40 yalign 0.45 zoom 0.2
+
+transform endscene_vendori:
+    xalign 0.60 yalign 0.45 zoom 0.15
+
 
 # FARM LEVEL
 
@@ -40,8 +58,8 @@ label start:
     show pelaaja oikea
 
     n "this is you!"
-    p "i'm created in a new Ren'Py game."
-    p "This is me speaking to me"
+    p "This is me!"
+    jump bosslevel
 
     show vendori vasen at right,vendor_perus_pos
     show pelaaja oikea at left
@@ -189,19 +207,16 @@ label farmb:
     v "Well you made it back..."
     v "Now the real challenge awaits..."
     v "But first go and plant the seed"
-menu:
-    "Go plant":
-        jump farmc
-    "I don't want to":
-        return
+    jump farmc
+
 
 label farmc:
     scene bg farm
     show pelaaja plant at plot
     show vendori vasen at vendor_pos
     v "Very good..."
-    v "we need more dialogue and stuff here"
-    v "description to go to first level in the forest"
+    v "NOW the first real test awaits you in the forest"
+    v "There you will find a "
     jump level1melee
 
 label farmd:
@@ -328,7 +343,7 @@ label level1b:
     jump farming
 
 label bosslevel:
-    scene blue
+    scene black
     show boss perus at right
     show pelaaja perus at left
     b "HELLO"
@@ -364,7 +379,7 @@ label bosslevel:
                         $ enemy_dead = True
                         hide boss attack
                         $ second = True
-                        jump endscene
+                        jump bossdialogue
                 else:
                     "MISS!!!"
                 show pelaaja perus at left
@@ -382,8 +397,23 @@ label bosslevel:
                 "MISS"
         show boss attack at right
     ###
+
+label bossdialogue:
+    show boss perus at right
+    show pelaaja perus at left
+    b "You've defeated me..."
+    b "For now!"
+    show boss perus at boss_exit1
+    b "BUT I SHALL RETURN"
+    show boss perus at boss_exit2
+    b "You better be ready for it!"
+    show boss perus at boss_exit3
+    b "MUAHAHAHAHA"
+    hide boss perus
+    show pelaaja perus at center
+    p "Well, now i can farm in peace i hope..."
     jump endscene
-    
+
 
 label ripscene:
     scene bg farm
@@ -394,7 +424,12 @@ label ripscene:
 
 label endscene:
     scene bg farm
-    n "You saved your farm and the whole planet"
-    n "... you indeed are the Hero Farmer!"
+    show pelaaja perus at endscene_pelaaja
+    show vendori vasen at endscene_vendori
+    n "The boss is defeated!"
+    show pelaaja oikea at left, pelaaja_perus_pos
+    show vendori vasen at right, vendor_perus_pos
+    v "Well done, you truly are the HERO FARMER!"
+    p "Thanks a lot, hopefully he doesn't come back like he told..."
     return
 

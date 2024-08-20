@@ -2,9 +2,17 @@
 errors listed below, and try again.
 
 
-File "game/script.rpy", line 298: expected menuitem
-    print(first, second, third)
-    ^
+File "game/script.rpy", line 404: show statement expects a non-empty block.
+    show boss perus at boss_exit1:
+                                  ^
+
+File "game/script.rpy", line 406: show statement expects a non-empty block.
+    show boss perus at boss_exit2:
+                                  ^
+
+File "game/script.rpy", line 408: show statement expects a non-empty block.
+    show boss perus at boss_exit3:
+                                  ^
 
 Ren'Py Version: Ren'Py 8.2.3.24061702
-Mon Aug 19 09:19:38 2024
+Tue Aug 20 09:43:57 2024
