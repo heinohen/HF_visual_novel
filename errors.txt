@@ -2,17 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/script.rpy", line 404: show statement expects a non-empty block.
-    show boss perus at boss_exit1:
-                                  ^
-
-File "game/script.rpy", line 406: show statement expects a non-empty block.
-    show boss perus at boss_exit2:
-                                  ^
-
-File "game/script.rpy", line 408: show statement expects a non-empty block.
-    show boss perus at boss_exit3:
-                                  ^
+File "game/script.rpy", line 134: reached end of line when expecting ':'.
+    if tutorial_done and 
+                         ^
 
 Ren'Py Version: Ren'Py 8.2.3.24061702
-Tue Aug 20 09:43:57 2024
+Thu Aug 22 14:39:08 2024

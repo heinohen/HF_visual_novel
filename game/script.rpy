@@ -43,36 +43,42 @@ transform endscene_vendori:
 label start:
 
     $ tutorial_done = False
+    $ level1_done = False
     $ first = False
     $ second = False
     $ third = False
 
     # Initialize a variable.
-    $ health_points = 1000
+    $ health_points = 5
 
     scene bg farm
 
-    n "hello"
-    n "welcome to your farm!"
+    n "HELLO"
+    n "WELCOME TO YOUR FARM!"
 
     show pelaaja oikea
 
-    n "this is you!"
+    n "THIS IS YOU!"
     p "This is me!"
-    jump bosslevel
+    p "So this is where i live"
 
     show vendori vasen at right,vendor_perus_pos
     show pelaaja oikea at left
 
     v "Hello im the vendor!"
-    v "I have one question for you"
-
+    v "There is evil lurking in the forests"
+    v "It is threatning the whole existence!"
+    p "Wow... i better not go in to the forest then!"
+    p "Im only here to farm"
+    v "Be that as it may, but if you want seeds to plant..."
+    v "YOU HAVE TO GO!"
+    v "So i have one question for you..."
     p "OK tell me!"
 
 
 label choices:
 
-    v "Do you want to continue farming?"
+    v "Do you want to starve to death with no seeds?"
     v "OR..."
     v "Embark on a journey through time and space and fight monsters"
     p "I'm not worthy hero!"
@@ -80,7 +86,7 @@ label choices:
     v "If you succeed collecting some seeds, i can provide help to defeat the great BOSS"
     v "How is it gonna be?"
 menu:
-    "Continue farming, please":
+    "Stay at the farm, please":
         jump farming
     "Embark on a great journey":
         #jump choices1_b
@@ -93,6 +99,7 @@ label choices1_a:
     v "Are you sure ?"
 menu:
     "Yes":
+        hide vendori vasen
         jump farming
     "No":
         jump choices
@@ -101,22 +108,38 @@ label choices1_b:
     v "...."
     v "Why did you make it so hard"
     v "Anyways.. let's go"
-    v "I almost forgot"
-    v "Here take this hoe with you"
-    jump not_farming
+    if not tutorial_done:
+        jump not_farming
+    else:
+        jump level1melee
 
 label not_farming:
     hide pelaaja oikea
-    n "He left to go on his chosen path..."
+    n "HE LEFT TO GO ON HIS CHOSEN PATH..."
     jump straight_line
 
 
 label farming:
     show bg farm
-    show pelaaja vasen at left
-    p "LETS FARM"
+    hide vendori vasen
+    show pelaaja plant at plot
+    p "Hmm, i don't seem to have any seeds to plant"
+    p "Where did that vendor go..."
     show vendori vasen at right,vendor_perus_pos
-    v "Isn't there something else you would want to do?"
+    v "Thats what i told you..."
+    hide pelaaja plant
+    show pelaaja perus at left
+    v "The seeds are in the forest!"
+    v "So will you go and get some?"
+    if tutorial_done and level1_done:
+        menu:
+            "Go farm!":
+                jump farming
+            "Go to the forest again":
+                jump level1melee
+            "Go fight THE BOSS (if you think you are ready)":
+                jump bosslevel
+
 
 menu:
     "Yes":
@@ -127,14 +150,16 @@ menu:
 
 label straight_line:
     scene bg road
-    n "You see a straight road with a forest in the end..."
-    n "Do you want to enter the forest"
+    n "YOU SEE A STRAIGHT ROAD WITH A FOREST IN THE END..."
+    n "DO YOU WANT TO ENTER THE FOREST"
 
 menu:
-    "Yes (Starts tutorial level)":
+    "Yes":
+        $ tutorial_done = True
         jump tutorial
-    "No (Goes back to farm)":
-        jump farming
+    "No":
+        $ tutorial_done = False
+        jump farmb
     
 
 # TUTORIAL LEVEL
@@ -142,16 +167,17 @@ menu:
 label tutorial:
     scene black
 # https://unsplash.com/photos/photo-of-pathway-between-trees-Xepovj4Dwd8?utm_content=creditShareLink&utm_medium=referral&utm_source=unsplash
-    n "Well here you are.."
+    n "WELL HERE YOU ARE"
+    n "IN THE DARK FOREST"
     show pelaaja perus at left
     p "Well here i truly am..."
     p "A bit frightened to be frank"
-    n "As the vendor said if you complete the journey you gain seeds to farm!"
-    n "We'll start slow, here is the most basic things that you must overcome"
+    n "AS THE VENDOR SAID, IF YOU COMPLETE THE JOURNEY YOU GAIN SEEDS TO FARM!"
+    n "WE'LL START SLOW, HERE IS THE MOST BASIC THINGS THAT YOU MUST OVERCOME"
     show hamis melee at right
-    n "If you see a dark coloured spider, it is melee, and can only bite you!"
+    n "IF YOU SEE A DARK COLOURED SPIDER, IT IS MELEE, AND CAN ONLY BITE YOU"
     show hamis melee at center
-    n "Hit it with your hoe!"
+    n "HIT IT WITH YOUR HOE!"
     show pelaaja hyokki at center
     ### ATTACK BLOCK
     $ hamis_health = 1
@@ -169,12 +195,13 @@ label tutorial:
                 else:
                     "MISS!!!"
     ###
-    n "Good job!"
+    n "GOOD JOB!"
     show pelaaja perus at left
-    n "If you see a green coloured spider, it is ranged ... so beware of the web attack!"
+    n "IF YOU SEE A GREEN COLOURED SPIDER, IT IS RANGED MONSTER"
+    n "SO BEWARE OF THE WEB ATTACK"
     show hamis ranged at right
-    n "You can also gain ranged attack through harvested crops ... if you make it that far"
-    n "Thats up to you"
+    n "YOU CAN EVENTUALLY GAIN RANGED ATTACK YOURSELF THROUGH HARVESTED CROPS..."
+    n "IF YOU MAKE IT THAT FAR..."
     ### ATTACK BLOCK
     $ enemy_name = "RANGED SPIDER"
     $ hamis_ranged = 2
@@ -183,15 +210,20 @@ label tutorial:
         "Your hitpoints [health_points], [enemy_name]'s [hamis_ranged]"
         menu: 
             "Try to hit":
+                show pelaaja hyokki at right
                 if rand % 2 == 0:
                     $ hamis_ranged -= 1
                     "HIT"
+                    show pelaaja perus at left
                 else:
                     "MISS!!!"
+                    show pelaaja perus at left
+
     hide hamis melee
     ###
-    n "This completes the tutorial... you gain your first seed"
-    n "Do you want to return to the farm and move on?"
+    n "THIS COMPLETES THE TUTORIAL"
+    n "YOU GAIN YOUR FIRST SEED!"
+    n "DO YOU WANT TO RETURN TO THE FARM AND CONTINUE?"
 menu:
     "Yes (goes to farm)":
         jump farmb
@@ -203,30 +235,57 @@ menu:
 label farmb:
     scene bg farm
     show pelaaja perus at left
-    show vendori vasen at right
-    v "Well you made it back..."
-    v "Now the real challenge awaits..."
-    v "But first go and plant the seed"
-    jump farmc
+
+    if not tutorial_done:
+        # TUTORIAL NOT YET COMPLETED
+        p "Huh, that was scary road..."
+        p "I cannot fanthom what that forest would be like..."
+        show vendori vasen at right
+        v "Why are you back?"
+        p "I completed the road section"
+        v "That was not the task..."
+        v "Go back and come to when you get the seed!"
+        jump straight_line
+    else:
+        show vendori vasen at right
+        v "Well you made it back..."
+        v "Go and plant the seed"
+        jump farmc
 
 
 label farmc:
     scene bg farm
     show pelaaja plant at plot
     show vendori vasen at vendor_pos
+    $ health_points = 5
     v "Very good..."
     v "NOW the first real test awaits you in the forest"
-    v "There you will find a "
-    jump level1melee
+    v "There you will find a path along the river"
+    v "And definately more spiders"
+    v "But if you make it through to the source of the river"
+    v "You gain yet another seed!"
+    v "Are you ready?"
+menu:
+    "Yes":
+        jump level1melee
+    "No":
+        jump farming
+        
 
 label farmd:
     scene bg farm
     show pelaaja perus at left
     show vendori vasen at right,vendor_perus_pos
     v "Very good..."
-    v "we need more dialogue and stuff here"
-    v "maybe jumps more and not instantly to boss"
-    jump bosslevel
+    v "You made it back"
+    v "What do you want to do next?"
+menu:
+    "Go farm!":
+        jump farming
+    "Go to the forest again":
+        jump level1melee
+    "Go fight THE BOSS (if you think you are ready)":
+        jump bosslevel
 
 
 # LEVEL 
@@ -335,13 +394,12 @@ label level1b:
             elif first and second and third:
                 $ print('should jump to farm...')
                 $ first, second, third = False, False, False
+                $ level1_done = True
                 jump farmd
         "No":
             $ first, second, third = False, False, False
             jump farming
-
-    jump farming
-
+            
 label bosslevel:
     scene black
     show boss perus at right
@@ -361,7 +419,7 @@ label bosslevel:
         $ count -= 1
 
     "BYE!"
-
+    $ health_points = 5
     $ enemy_health = 3
     $ enemy_name = "THE BOSS"
     $ enemy_dead = False
